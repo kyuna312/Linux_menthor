@@ -135,8 +135,6 @@ describe here worked for me at the time I needed a solution.
 14. 情境：使得某些特定ip透過特定gw出去
 
     ```bash
-    腳本一：
-
     arr=("ip1" "ip2")
     for i in ${arr[*]}
     do
@@ -144,14 +142,10 @@ describe here worked for me at the time I needed a solution.
     done
     ```
 
-    ```bash
-    腳本二：
-    ```
-
     [ishadm](tools/ishadm)
 
     ```bash
-    instruction ：route add -net x.x.x.x netmask x.x.x.x gw x.x.x.x
+    route add -net x.x.x.x netmask x.x.x.x gw x.x.x.x
     ```
 
 15. 情境：ls 列出的檔名需要跳脫(escape)時，自動幫你用引號包起來
@@ -159,23 +153,18 @@ describe here worked for me at the time I needed a solution.
     ```bash
     instruction ：ls --quoting-style=shell
 
-    // 結果例如： (可以 man ls 查看更多 style)
-    // '!this$file%contain&control(characters)~'  'this file contain whitespace char'  tmp.txt
     ```
 
 16. 情境：查看CPU核心數 (連 Intel HT 超執行緒技術所虛擬成兩倍個數也算在內)
 
     ```bash
-    instruction 一：grep -c ^processor /proc/cpuinfo
+    grep -c ^processor /proc/cpuinfo
 
-    instruction 二：grep -Ec '^cpu[0-9]+ ' /proc/stat
+    grep -Ec '^cpu[0-9]+ ' /proc/stat
 
-    // 常用來搭配 make instruction ，寫在 shell script 中使用，以利加速建置。
     ```
 
     ```bash
-    腳本：
-
     cpu_cores="$(grep -c ^processor /proc/cpuinfo)"
     make -j$(cpu_cores)
     ```
@@ -184,13 +173,6 @@ describe here worked for me at the time I needed a solution.
 
     ```bash
     instruction ：sync; sudo sysctl vm.drop_caches={1, 2, 3, 4}
-
-    // 1 -> pagecache
-    // 2 -> slab cache
-    // 3 -> pagecache & slab cache
-    // 4 -> disable
-
-    // 詳見 https://www.kernel.org/doc/Documentation/sysctl/vm.txt
     ```
 
 18. 情境：使用ls列出最新的檔名列在最下面
@@ -203,8 +185,6 @@ describe here worked for me at the time I needed a solution.
 
     ```bash
     instruction ：export LC_ALL=C;LANG=C;LANGUAGE=en_US
-
-    // 輸入locale進行確認：
 
     $ locale
     LANG=C
@@ -233,7 +213,6 @@ describe here worked for me at the time I needed a solution.
 21. 情境：檢查 iptables log 是否有持續收錄
 
     ```bash
-    腳本：
 
     NO_LOG=0
     NOWLOGS=$(grep iptables /var/log/messages| wc -l)
@@ -267,17 +246,17 @@ describe here worked for me at the time I needed a solution.
 23. 情境：以SSH登入時出現「WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!」
 
     ```bash
-    instruction ：ssh-keygen -R 伺服器端的IP或網址
+    instruction ：ssh-keygen -R 
     ```
 
 24. 情境：用 date 將人類可讀的日期、時間 <-> unix time
 
     ```bash
-    # unix time -> 人類可讀的日期、時間
-    instruction 一：date -d @timestamp
+    # unix time 
+    date -d @timestamp
 
-    # 人類可讀的日期、時間 -> unix time
-    instruction 二：date +%s --date='2015-01-01'
+    # unix time
+    date +%s --date='2015-01-01'
     ```
 
 25. 情境：用 chsh 更改 shell 環境
@@ -285,33 +264,17 @@ describe here worked for me at the time I needed a solution.
     ```bash
     # 先用 cat /etc/shells 查看有哪些 shell 環境
 
-    instruction ：chsh -s /etc/bash
-    # 執行後，重新 login
-    # 用 ps $$ 查看 shell 環境是否改變
+    chsh -s /etc/bash
     ```
 
 26. 情境：bash 變數索引表
 
     ```bash
-    # 印出 bash 版本
     echo $BASH_VERSION
-
-    # 印出 hostname
     echo $HOSTNAME
-
-    # 印出 CDPATH 設定
     echo $CDPATH
-
-    # 印出分隔字元
     echo $IFS
-
-    # 印出執行擋路徑
     echo $PATH
-
-    # 印出等待秒數
-    #（如 $TMOUT 是 300 秒，
-    # 若使用者超過三百秒沒跟 bash 互動
-    # 則自動登出。）
     echo $TMOUT
     ```
 
@@ -330,10 +293,7 @@ describe here worked for me at the time I needed a solution.
 29. 情境：協助 bash 腳本 debug
 
     ```bash
-    # 腳本有錯立刻停止
     set -e
-
-    # 顯示腳本執行進度
     set -x
     ```
 
@@ -342,10 +302,6 @@ describe here worked for me at the time I needed a solution.
     ```bash
     set `date`
     echo $1 $6
-
-    # 假設 date 輸出是 Tue Feb 10 09:00:52 CST 2015
-    # 則 echo $1 $6 輸出為
-    Tue 2015
     ```
 
 31. 情境：Linux 效能觀察相關工具查閱表
@@ -373,8 +329,6 @@ describe here worked for me at the time I needed a solution.
     ```bash
     instruction 一：sipcalc 192.168.100.0/24
 
-    輸出結果：
-
     -[ipv4 : 192.168.100.0/24] - 0
 
     [CIDR]
@@ -391,7 +345,7 @@ describe here worked for me at the time I needed a solution.
     Network range       - 192.168.100.0 - 192.168.100.255
     Usable range        - 192.168.100.1 - 192.168.100.254
 
-    instruction 二：whatmask 192.168.100.0/24
+    whatmask 192.168.100.0/24
 
     ------------------------------------------------
                TCP/IP NETWORK INFORMATION
@@ -413,7 +367,7 @@ describe here worked for me at the time I needed a solution.
 
     ```bash
     # 將遠端主機 IP 為 192.168.1.123 的 /root/ 目錄掛載到 /mnt/server1 目錄下
-    instruction 一：sudo sshfs root@192.168.1.123:/ /mnt/server1/
+    sudo sshfs root@192.168.1.123:/ /mnt/server1/
     ```
 
 38. 情境：設定 alias，使其 ssh 連線到須透過特定 gw 的機器前先做檢查
@@ -451,7 +405,6 @@ describe here worked for me at the time I needed a solution.
 
     ```bash
     腳本一：
-    # n 分鐘後關機
     $ bash countdown n
 
     The system will be shutdown in 5 minutes
@@ -466,8 +419,6 @@ describe here worked for me at the time I needed a solution.
     [countdown](tools/countdown)
 
     ```bash
-    腳本二：
-    # 十分鐘內關機
     $ rshutdown -g600
 
     Shutdown started.    Thu Dec  2 18:26:58 EST 2004
@@ -484,20 +435,14 @@ describe here worked for me at the time I needed a solution.
 41. 情境：一主機雙網卡
 
     ```bash
-    腳本：
-
-    # 設定第一個 subnet 的路由表 (表名稱命名為70)
     ip route flush table 70
     ip route add to 172.70.12.0/23 dev eth0 table 70
     ip route add to default via 172.70.12.1 dev eth0 table 70
 
-    # 設定第二個 subnet 的路由表 (表名稱命名為80)
     ip route flush table 80
     ip route add to 172.80.24.0/23 dev eth1 table 80
     ip route add to default via 172.80.24.1 dev eth1 table 80
 
-    # 建立路由表選取的規則。依據 source IP 來選擇。
-    # 每一條規則都需要給 priority 值，方便起見就給予路由表名。
     ip rule add from 172.70.12.0/23 table 70 priority 70
     ip rule add from 172.80.24.0/23 table 80 priority 80
 
@@ -505,46 +450,7 @@ describe here worked for me at the time I needed a solution.
     ip route flush cache
     ```
 
-42. 情境：切換使用者
-
-    ```bash
-    $ su <user>
-
-    切換使用者 ID。
-
-    假設有兩使用者 ID (A, B)。
-    以 A ID 輸入 su B 後，則會切換至 B ID。
-
-    若以 A ID 輸入 su B --preserve-environment 後，一樣會切換至 B ID。
-    但profile, .bashrc 等環境參數還是會持續使用 A ID 的設定。
-
-    $ sudo su <user>
-
-    以 root 身份執行 su <user>。與 su <user> 差別在於執行instruction 後，
-    輸入之密碼不同。
-
-    例如：
-    以 A ID 輸入 su B，則輸入 B ID 密碼後，即切換至 B ID。
-    以 A ID 輸入 sudo su B，則輸入 A ID 密碼後，即切換至 B ID。
-
-    $ sudo su -
-
-    切換至 root 且使用 root 的環境設定。
-
-    sudo 配置
-
-    使用者帳號  登入者的來源主機名稱=(可切換的身份 user:group)  可下達的instruction 
-    root                        ALL =(ALL:ALL)                  ALL   <==這是預設值
-    ```
-
-43. 情境：返回前一個目錄
-
-    ```bash
-    instruction 一：cd $OLDPWD
-    instruction 二：cd -
-    ```
-
-44. 情境：Ubuntu 移除沒用到的 kernel 與 header
+42. 情境：Ubuntu 移除沒用到的 kernel 與 header
 
     ```bash
     instruction ：sudo apt-get purge $(dpkg -l linux-{image,headers}-"[0-9]*" | awk '/ii/{print $2}' | grep -ve "$(uname -r | sed -r 's/-[a-z]+//')")
@@ -556,27 +462,8 @@ describe here worked for me at the time I needed a solution.
     sudo apt-get autoremove
     ```
 
-45. 情境：如何尋找安裝套件時，缺乏的 header file或 Libary。
 
-    ```bash
-    假設安裝套件過程中，出現錯誤訊息如 fatal error: GL/gl.h: No such file or directory
-    instruction : apt-file search "gl.h"
-    ```
-
-46. 情境：如何知道特定 process 已運行多久？
-
-    ```bash
-    假設 mongodb 的 pid 是 43873
-    
-    instruction ：ps -p 43873 -o pid,cmd,etime,uid,gid
-    
-    結果：
-    PID CMD                             ELAPSED   UID   GID
-    43873 /usr/bin/mongod --config /e 64-22:58:04   106 65534
-    其中 ELAPSED 格式為 [[dd-]hh:]mm:ss
-    ```
-
-47. 情境：如何知道特定 process 開始執行的日期與時間？
+43. 情境：如何知道特定 process 開始執行的日期與時間？
 
     ```bash
     假設 lxterminal的pid是1878
