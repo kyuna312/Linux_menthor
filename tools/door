@@ -1,0 +1,27 @@
+#!/bin/bash
+
+open(){
+
+	START=$(($1))
+	END=$(($2))
+
+	for ((port=START; port<=END; port++));
+	do
+		netcat -l $port &
+	done
+}
+
+case $1 in
+	"open")
+		open $2 $3
+		echo "Doors opened QQ"
+	;;
+	"close")
+		netcat -z -v -n $2 $3-$4
+		echo "Closed $2 's door"
+	;;
+	*)
+		echo "Usage: bash $0 open start_port end_port"
+		echo "Usage: bash $0 close ipaddr start_port end_port"
+	;;
+esac
